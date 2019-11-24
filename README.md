@@ -31,7 +31,7 @@
 
 ```````
 
-##**Open the link in Gitlab to be able to clone the repository**
+## **Open the link in Gitlab to be able to clone the repository**
 
 https://gitlab.com/beta-robots/diff_drive_sim_robot
 
