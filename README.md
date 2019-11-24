@@ -98,8 +98,6 @@ As we can see, inside this folder "urdf" we have already copied the file where i
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description/urdf$ gedit ddsr_partial.xacro 
 
 
-```````
-
 <!-- Robot name -->
 <robot name="ddsr" xmlns:xacro="http://ros.org/wiki/xacro">
 <xacro:arg name="namespace" default="ddsr" />
@@ -138,11 +136,11 @@ As we can see, inside this folder "urdf" we have already copied the file where i
 <xacro:include filename="$(find ddsr_gazebo)/gazebo/ddsr.gazebo" />
 <xacro:gazebo_include gazebo_namespace="$(arg namespace)" />
 
+```````
 
 Also, we can edit every component of the robot (local origin in rpy, mass, name, etc.) for example the platform:
 
-
-
+```````
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ PLATFORM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <link name="footprint">
@@ -186,6 +184,8 @@ Also, we can edit every component of the robot (local origin in rpy, mass, name,
 			izz="${0.083*base_mass*(base_length*base_length+base_width*base_width)}" />
 	</inertial>
 </link>
+
+```````
 
 In the other components we can also edit the same items and link them with the platform as a base in "<parent link="platform"/>":
 
@@ -292,7 +292,7 @@ drwxr-xr-x 5 gengiro gengiro  4096 nov 15 17:10 ../
 
 ```````
 
-If we open this folder, we can modify
+If we open this folder, we can modify how to visualize the robot:
 
 ```````
 
@@ -307,7 +307,7 @@ drwxr-xr-x 5 gengiro gengiro 4096 nov 15 17:10 ../
 
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description/launch$ nano description.launch 
 
-```````
+
 
 <?xml version="1.0"?>
 
@@ -358,6 +358,7 @@ drwxr-xr-x 5 gengiro gengiro 4096 nov 15 17:10 ../
 
 </launch>
 
+```````
 
 
 ## **Launch gazebo**
