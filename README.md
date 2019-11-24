@@ -65,10 +65,6 @@ drwxr-xr-x 2 gengiro gengiro 4096 nov 15 17:39 launch/
 drwxr-xr-x 2 gengiro gengiro 4096 nov 15 20:33 rviz/
 drwxr-xr-x 2 gengiro gengiro 4096 nov 15 20:33 urdf/
 
-
-```````
-
-```````
 ~/catkin_ws/src$ cd diff_drive_sim_robot/
 ~/catkin_ws/src/diff_drive_sim_robot$ cd ddsr_description/
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description$ cd urdf/
@@ -101,8 +97,6 @@ As we can see, inside this folder "urdf" we have already copied the file where i
 
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description/urdf$ gedit ddsr_partial.xacro 
 
-
-```````
 
 ```````
 
@@ -200,6 +194,7 @@ Also, we can edit every component of the robot (local origin in rpy, mass, name,
 
 In the other components we can also edit the same items and link them with the platform as a base in "<parent link="platform"/>":
 
+```````
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~ DRIVE WHEELS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
@@ -292,9 +287,6 @@ In the other components we can also edit the same items and link them with the p
 	</actuator>
 </transmission>
 
-```````
-
-```````
 
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description/urdf$ ll
 total 32
@@ -316,10 +308,6 @@ total 12
 drwxr-xr-x 2 gengiro gengiro 4096 nov 15 17:39 ./
 drwxr-xr-x 5 gengiro gengiro 4096 nov 15 17:10 ../
 -rw-r--r-- 1 gengiro gengiro 1444 nov 15 17:39 description.launch
-
-```````
-
-```````
 
 
 ~/catkin_ws/src/diff_drive_sim_robot/ddsr_description/launch$ nano description.launch 
@@ -386,5 +374,3 @@ After this modifications, we launch Gazebo:
 ~/catkin_ws$ roslaunch ddsr_description description.launch 
 
 ```````
-
-![Screenshot](Screenshot from 2019-11-24 22-56-29.png) 
