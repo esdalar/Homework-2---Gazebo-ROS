@@ -31,6 +31,11 @@
 
 ```````
 
+##**Open the link in Gitlab to be able to clone the repository**
+
+https://gitlab.com/beta-robots/diff_drive_sim_robot
+
+
 ## **Copy the folder "diff_drive_sim_robot" that is in github directory in our workspace in src**
 
 
