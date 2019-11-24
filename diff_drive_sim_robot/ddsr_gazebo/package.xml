@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+
+  <name>ddsr_gazebo</name>
+  <version>0.0.0</version>
+  <description>Extra specifications of the ddsr robot for Gazebo simulation</description>
+
+  <maintainer email="andreu@beta-robots.com">Andreu Corominas Murtra</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>gazebo_ros</depend>
+  <depend>ddsr_description</depend>
+
+  <export>
+    <gazebo_ros gazebo_model_path="${prefix}/models" />
+  </export>
+
+</package>

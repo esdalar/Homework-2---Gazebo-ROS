@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ddsr_description</name>
+  <version>0.0.0</version>
+  <description>The diff_drive_sim_robot (DDSR) description</description>
+
+  <maintainer email="andreu@beta-robots.com">Andreu Corominas Murtra</maintainer>
+
+  <license>TODO</license>
+
+  <author email="andreu@beta-robots.com">Andreu Corominas Murtra</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

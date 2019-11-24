@@ -1,0 +1,314 @@
+<?xml version="1.0"?>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	DIFF DRIVE SIM ROBOT MODEL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Developed by Beta Robots SL, www.beta-robots.com
+	Description: This file describes geometry and simulation parameters for the DDSR robot
+	Units: [m], [Kg], [rad] (SI)
+	Tutorials on urdf gazebo: http://gazebosim.org/tutorials?cat=connect_ros
+	Tutorials on urdf description: http://wiki.ros.org/urdf/Tutorials
+	Inertia of standard shapes: http://en.wikipedia.org/wiki/List_of_moments_of_inertia
+	Some tips on wheeled robots: http://www.romin.upm.es/wiki/index.php?title=ROS%3ATutorials/Simulate_Your_Robot_in_Gazebo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- Robot name -->
+<robot name="ddsr" xmlns:xacro="http://ros.org/wiki/xacro">
+<xacro:arg name="namespace" default="ddsr" />
+
+<!-- user input dimensions  ( DEBUG: all mass values have been divided by 100 )  -->
+<xacro:property name="robot" value="ddsr" />
+<xacro:property name="base_length" value="0.8" />
+<xacro:property name="base_width" value="0.6" />
+<xacro:property name="base_height" value="0.2" />
+<xacro:property name="base_mass" value="300.0" />
+<xacro:property name="floor_clearance" value="0.08" />
+<xacro:property name="wheel_baseline" value="0.6" />
+<xacro:property name="wheel_width" value="0.03" />
+<xacro:property name="wheel_radius" value="0.1" />
+<xacro:property name="wheel_mass" value="5.0" />
+<xacro:property name="cwheel_width" value="0.02" />
+<xacro:property name="cwheel_radius" value="0.05" />
+<xacro:property name="cwheel_mass" value="1" />
+
+<!-- materials -->
+<material name="ddsr/blue">
+	<color rgba="0 0 0.8 1"/>
+</material>
+<material name="ddsr/red">
+	<color rgba="1 0.1 0.0 1"/>
+</material>
+<material name="ddsr/grey">
+	<color rgba="0.1 0.1 0.1 1"/>
+</material>
+<material name="ddsr/white">
+	<color rgba="1 1 1 1"/>
+</material>
+
+
+<!-- Extra definitions for gazebo simulation  -->
+<xacro:include filename="$(find ddsr_gazebo)/gazebo/ddsr.gazebo" />
+<xacro:gazebo_include gazebo_namespace="$(arg namespace)" />
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~ PLATFORM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<link name="footprint">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.01 0.01 0.01"/>
+		</geometry>
+		<material name="ddsr/white"/>
+	</visual>
+</link>
+
+<!-- Base Link. STL is scaled with te ratio between NEW/OLD dimensions -->
+<joint name="$footprint_2_platform" type="fixed" >
+	<parent link="footprint"/>
+	<child link="platform"/>
+	<origin xyz="${base_length*0.25} 0 ${floor_clearance+base_height*0.5}" rpy="0 0 0"/>
+</joint>
+<link name="platform">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="${base_length} ${base_width} ${base_height}"/>
+		</geometry>
+		<material name="ddsr/blue" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="${base_length} ${base_width} ${base_height}"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="${base_mass}" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*base_mass*(base_width*base_width+base_height*base_height)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*base_mass*(base_length*base_length+base_height*base_height)}"
+			iyz="0.0"
+			izz="${0.083*base_mass*(base_length*base_length+base_width*base_width)}" />
+	</inertial>
+</link>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~ DRIVE WHEELS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<joint name="platform_2_left_wheel" type="continuous" >
+	<parent link="platform"/>
+	<child link="left_wheel"/>
+	<origin xyz="${-base_length*0.3} ${base_width*0.5} ${-base_height*0.5+wheel_radius-floor_clearance}" rpy="${-0.5*pi} 0 0"/>
+	<axis xyz="0 0 1"/>
+	<limit effort="99999" velocity="${20*pi}"/>
+	<dynamics friction="0.25" damping="0.05"/>
+</joint>
+<link name="left_wheel">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+		</geometry>
+		<material name="ddsr/grey" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="${wheel_mass}" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*wheel_mass*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*wheel_mass*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			iyz="0.0"
+			izz="${0.5*wheel_mass*wheel_radius*wheel_radius}" />
+	</inertial>
+</link>
+
+<joint name="platform_2_right_wheel" type="continuous" >
+	<parent link="platform"/>
+	<child link="right_wheel"/>
+	<origin xyz="${-base_length*0.3} ${-base_width*0.5} ${-base_height*0.5+wheel_radius-floor_clearance}" rpy="${-0.5*pi} 0 0"/>
+	<axis xyz="0 0 1"/>
+	<limit effort="99999" velocity="${20*pi}"/>
+	<dynamics friction="0.25" damping="0.05"/>
+</joint>
+<link name="right_wheel">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+		</geometry>
+		<material name="ddsr/grey" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="${wheel_mass}" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*wheel_mass*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*wheel_mass*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			iyz="0.0"
+			izz="${0.5*wheel_mass*wheel_radius*wheel_radius}" />
+	</inertial>
+</link>
+
+<transmission name="$platform_2_left_wheel_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="platform_2_left_wheel">
+		<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="left_wheel_motor">
+		<hardwareInterface>EffortJointInterface</hardwareInterface>
+		<mechanicalReduction>30</mechanicalReduction>
+	</actuator>
+</transmission>
+<transmission name="$platform_2_right_wheel_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="platform_2_right_wheel">
+		<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="right_wheel_motor">
+		<hardwareInterface>EffortJointInterface</hardwareInterface>
+		<mechanicalReduction>30</mechanicalReduction>
+	</actuator>
+</transmission>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~ CASTER WHEEL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<joint name="platform_2_caster_hinge_1" type="continuous" >
+	<parent link="platform"/>
+	<child link="caster_hinge_1"/>
+	<origin xyz="${base_length*0.4} 0 ${-base_height*0.5-0.01}" rpy="0 0 0"/>
+	<axis xyz="0 0 1"/>
+	<limit effort="100000." velocity="${2*pi}"/>
+	<dynamics friction="0.1" damping="0.01"/>
+</joint>
+<link name="caster_hinge_1">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.02 0.02 0.02"/>
+		</geometry>
+		<material name="ddsr/red" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.02 0.02 0.02"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="1" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*(0.02*0.02+0.02*0.02)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*(0.02*0.02+0.02*0.02)}"
+			iyz="0.0"
+			izz="${0.083*(0.02*0.02+0.02*0.02)}" />
+	</inertial>
+</link>
+
+<joint name="caster_hinge_1_2_caster_hinge_2" type="fixed" >
+	<parent link="caster_hinge_1"/>
+	<child link="caster_hinge_2"/>
+	<origin xyz="${-0.04*0.707*0.5} 0 ${-0.01-0.04*0.707*0.5}" rpy="0 ${0.25*pi} 0"/>
+</joint>
+<link name="caster_hinge_2">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.02 0.02 0.04"/>
+		</geometry>
+		<material name="ddsr/red" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.02 0.02 0.04"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="1" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*(0.02*0.02+0.04*0.04)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*(0.02*0.02+0.04*0.04)}"
+			iyz="0.0"
+			izz="${0.083*(0.02*0.02+0.02*0.02)}" />
+	</inertial>
+</link>
+
+<joint name="caster_hinge_2_2_caster_wheel" type="continuous" >
+	<parent link="caster_hinge_2"/>
+	<child link="caster_wheel"/>
+	<origin xyz="0 0 ${-0.04*0.707*0.5}" rpy="-${0.5*pi} 0 0"/>
+	<axis xyz="0 0 1"/>
+	<limit effort="99999" velocity="${20*pi}"/>
+	<dynamics friction="0.25" damping="0.05"/>
+</joint>
+<link name="caster_wheel">
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${0.5*wheel_width}" radius="${floor_clearance-0.02-0.04*0.707}"/>
+		</geometry>
+		<material name="ddsr/grey" />
+	</visual>
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<cylinder length="${0.5*wheel_width}" radius="${floor_clearance-0.02-0.04*0.707}"/>
+		</geometry>
+	</collision>
+	<inertial>
+		<mass value="${wheel_mass*0.5}" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="${0.083*wheel_mass*0.5*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="${0.083*wheel_mass*0.5*(3*wheel_radius*wheel_radius+wheel_width*wheel_width)}"
+			iyz="0.0"
+			izz="${0.5*wheel_mass*0.5*wheel_radius*wheel_radius}" />
+	</inertial>
+</link>
+
+<!--  caster steering free transmission -->
+<transmission name="platform_2_caster_hinge_1_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="platform_2_caster_hinge_1">
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="platform_2_caster_hinge_1_steering">
+		<mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+</transmission>
+
+<!-- caster drive free transmission -->
+<transmission name="caster_hinge_2_2_caster_wheel_transmission">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="caster_hinge_2_2_caster_wheel">
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="caster_hinge_2_2_caster_driving">
+		<mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+</transmission>
+
+
+</robot>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ddsr_control</name>
+  <version>0.0.0</version>
+  <description>The ddsr_control package</description>
+
+  <maintainer email="andreu@beta-robots.com">Andreu Corominas Murtra</maintainer>
+
+  <author email="andreu@beta-robots.com">Andreu Corominas Murtra</author>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>controller_manager</depend>
+  <depend>ddsr_gazebo</depend>
+  <depend>ddsr_description</depend>
+
+  <export>
+  </export>
+  </package>
