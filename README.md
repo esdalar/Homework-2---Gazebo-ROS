@@ -187,7 +187,7 @@ Also, we can edit every component of the robot (local origin in rpy, mass, name,
 
 ```````
 
-In the other components we can also edit the same items and link them with the platform as a base in "<parent link="platform"/>":
+In the other components we can also edit the same items and link them with the platform as a base in "parent link="platform":
 
 ```````
 
